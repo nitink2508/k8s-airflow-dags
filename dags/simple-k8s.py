@@ -43,7 +43,7 @@ try:
         get_logs=True)
 
 
-        ad_local_metrics
+        simplek8s
 
 except ImportError as e:
     log.warning("Could not import KubernetesPodOperator: " + str(e))
