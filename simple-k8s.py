@@ -1,7 +1,5 @@
 import random
-
-from airflow.kubernetes.volume import Volume
-from airflow.kubernetes.volume_mount import VolumeMount
+from airflow.providers.cncf.kubernetes.secret import Secret
 from airflow.models import DAG
 from airflow.utils.dates import days_ago
 from airflow.utils.log.logging_mixin import LoggingMixin
