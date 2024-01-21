@@ -10,7 +10,8 @@ default_args = {
     'email': ['airflow@example.com'],
     'email_on_failure': False,
     'email_on_retry': False,
-    'retries': 1,
+    'retries': 0,
+    'catchup':False
     'retry_delay': timedelta(minutes=5)
 }
 
@@ -22,14 +23,13 @@ start = DummyOperator(task_id='start', dag=dag)
 
 passing = KubernetesPodOperator(namespace='airflow',
                           image="nitinkalyankerdev/r-demo:latest",
-                          cmds=["Rscript","script.R"],
+                          #cmds=["Rscript","script.R"],
                           labels={"foo": "bar"},
                           name="r-test",
                           task_id="r-task",
                           get_logs=True,
                           image_pull_policy='Always',
                           hostnetwork=True,
-                          is_delete_operator_pod=False,
                           dag=dag
                           )
 
