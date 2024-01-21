@@ -29,6 +29,7 @@ passing = KubernetesPodOperator(namespace='airflow',
                           task_id="r-task",
                           get_logs=True,
                           image_pull_policy='Always',
+                          in_cluster=True,
                           hostnetwork=True,
                           dag=dag
                           )
