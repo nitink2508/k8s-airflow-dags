@@ -42,24 +42,9 @@ start = DummyOperator(task_id='start', dag=dag)
 #                           hostnetwork=True,
 #                           dag=dag
 #                           )
-# passing = KubernetesPodOperator(namespace='airflow',
-#                           image=image_name,
-#                           #cmds=["Rscript","script.R"],
-#                           #image_pull_secrets="regcred",
-#                           image_pull_secrets=[k8s.V1LocalObjectReference("regcred")],
-#                           labels={"foo": "bar"},
-#                           name="r-test",
-#                           task_id="r-task",
-#                           get_logs=True,
-#                           image_pull_policy='Always',
-#                           in_cluster=True,
-#                           hostnetwork=True,
-#                           dag=dag
-#                           )
-
 passing = KubernetesPodOperator(namespace='airflow',
                           image=image_name,
-                          cmds=["Rscript","/home/r-environment/script.R"],
+                          #cmds=["Rscript","script.R"],
                           #image_pull_secrets="regcred",
                           image_pull_secrets=[k8s.V1LocalObjectReference("regcred")],
                           labels={"foo": "bar"},
@@ -69,10 +54,25 @@ passing = KubernetesPodOperator(namespace='airflow',
                           image_pull_policy='Always',
                           in_cluster=True,
                           hostnetwork=True,
-                          volumes=[volume,k8s.V1Volume(name="code-volume", host_path=k8s.V1HostPathVolumeSource(path=local_code_path))],
-                          volume_mounts=[volume_mount,k8s.V1VolumeMount(mount_path="/home/r-environment", name="code-volume")],
                           dag=dag
                           )
+
+# passing = KubernetesPodOperator(namespace='airflow',
+#                           image=image_name,
+#                           cmds=["Rscript","/home/r-environment/script.R"],
+#                           #image_pull_secrets="regcred",
+#                           image_pull_secrets=[k8s.V1LocalObjectReference("regcred")],
+#                           labels={"foo": "bar"},
+#                           name="r-test",
+#                           task_id="r-task",
+#                           get_logs=True,
+#                           image_pull_policy='Always',
+#                           in_cluster=True,
+#                           hostnetwork=True,
+#                           volumes=[volume,k8s.V1Volume(name="code-volume", host_path=k8s.V1HostPathVolumeSource(path=local_code_path))],
+#                           volume_mounts=[volume_mount,k8s.V1VolumeMount(mount_path="/home/r-environment", name="code-volume")],
+#                           dag=dag
+#                           )
 
 
 
