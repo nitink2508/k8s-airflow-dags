@@ -20,14 +20,15 @@ default_args = {
 dag = DAG(
     'r_hello_world', default_args=default_args, schedule_interval=timedelta(minutes=10))
 
+local_scripts_path = "/Users/jani/Downloads/r-script/"
 volume_mount = k8s.V1VolumeMount(
-    name="test-volume", mount_path="/home/r-environment", sub_path=None, read_only=True
+    name="test-volume", mount_path="/opt/airflow/dags", sub_path=None, read_only=True
 )
 volume = k8s.V1Volume(
     name="test-volume",
+    host_path=k8s.V1HostPathVolumeSource(path=local_scripts_path)
     persistent_volume_claim=k8s.V1PersistentVolumeClaimVolumeSource(claim_name="test-volume"),
 )
-local_code_path = "/Users/jani/Downloads/r-script/"
 start = DummyOperator(task_id='start', dag=dag)
 
 # passing = KubernetesPodOperator(namespace='airflow',
@@ -42,24 +43,9 @@ start = DummyOperator(task_id='start', dag=dag)
 #                           hostnetwork=True,
 #                           dag=dag
 #                           )
-passing = KubernetesPodOperator(namespace='airflow',
-                          image=image_name,
-                          #cmds=["Rscript","script.R"],
-                          #image_pull_secrets="regcred",
-                          image_pull_secrets=[k8s.V1LocalObjectReference("regcred")],
-                          labels={"foo": "bar"},
-                          name="r-test",
-                          task_id="r-task",
-                          get_logs=True,
-                          image_pull_policy='Always',
-                          in_cluster=True,
-                          hostnetwork=True,
-                          dag=dag
-                          )
-
 # passing = KubernetesPodOperator(namespace='airflow',
 #                           image=image_name,
-#                           cmds=["Rscript","/home/r-environment/script.R"],
+#                           #cmds=["Rscript","script.R"],
 #                           #image_pull_secrets="regcred",
 #                           image_pull_secrets=[k8s.V1LocalObjectReference("regcred")],
 #                           labels={"foo": "bar"},
@@ -69,10 +55,25 @@ passing = KubernetesPodOperator(namespace='airflow',
 #                           image_pull_policy='Always',
 #                           in_cluster=True,
 #                           hostnetwork=True,
-#                           volumes=[volume,k8s.V1Volume(name="code-volume", host_path=k8s.V1HostPathVolumeSource(path=local_code_path))],
-#                           volume_mounts=[volume_mount,k8s.V1VolumeMount(mount_path="/home/r-environment", name="code-volume")],
 #                           dag=dag
 #                           )
+
+passing = KubernetesPodOperator(namespace='airflow',
+                          image=image_name,
+                          cmds=["Rscript","/home/r-environment/script.R"],
+                          #image_pull_secrets="regcred",
+                          image_pull_secrets=[k8s.V1LocalObjectReference("regcred")],
+                          labels={"foo": "bar"},
+                          name="r-test",
+                          task_id="r-task",
+                          get_logs=True,
+                          image_pull_policy='Always',
+                          in_cluster=True,
+                          hostnetwork=True,
+                          volumes=[volume],
+                          volume_mounts=[volume_mount],
+                          dag=dag
+                          )
 
 
 
