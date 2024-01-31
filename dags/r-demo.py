@@ -23,7 +23,7 @@ dag = DAG(
 
 local_scripts_path = "/Users/jani/Downloads/r-script/"
 volume_mount = k8s.V1VolumeMount(
-    name="test-volume", mount_path="/opt/airflow/dags", sub_path=None, read_only=True
+    name="test-volume", mount_path="/opt/airflow/scripts", sub_path=None, read_only=True
 )
 volume = k8s.V1Volume(
     name="test-volume",
@@ -60,7 +60,7 @@ start = DummyOperator(task_id='start', dag=dag)
 
 passing = KubernetesPodOperator(namespace='airflow',
                           image=image_name,
-                          cmds=["Rscript","/opt/airflow/dags/script.R"],
+                          cmds=["Rscript","/opt/airflow/scripts/script.R"],
                           #image_pull_secrets="regcred",
                           image_pull_secrets=[k8s.V1LocalObjectReference("regcred")],
                           labels={"foo": "bar"},
