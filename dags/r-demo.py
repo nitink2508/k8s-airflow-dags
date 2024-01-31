@@ -5,6 +5,7 @@ from airflow.operators.dummy_operator import DummyOperator
 from airflow.models import Variable
 from kubernetes.client import models as k8s
 image_name = Variable.get("image")
+
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
