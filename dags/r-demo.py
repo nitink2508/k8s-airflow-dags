@@ -18,7 +18,7 @@ default_args = {
 }
 
 dag = DAG(
-    'r_hello_world', default_args=default_args, schedule_interval=timedelta(minutes=10))
+    'r_hello_world', default_args=default_args, schedule_interval=timedelta(minutes=200))
 
 local_scripts_path = "/Users/jani/Downloads/r-script/"
 volume_mount = k8s.V1VolumeMount(
@@ -67,6 +67,7 @@ passing = KubernetesPodOperator(namespace='airflow',
                           task_id="r-task",
                           get_logs=True,
                           image_pull_policy='Always',
+                          startup_timeout_seconds=200,
                           in_cluster=True,
                           hostnetwork=True,
                           volumes=[volume],
