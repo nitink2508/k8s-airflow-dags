@@ -21,13 +21,23 @@ default_args = {
 dag = DAG(
     'r_hello_world', default_args=default_args, schedule_interval=timedelta(minutes=200))
 
-local_scripts_path = "/Users/jani/Downloads/r-script/"
+# local_scripts_path = "/Users/jani/Downloads/r-script/"
+# volume_mount = k8s.V1VolumeMount(
+#     name="test-volume", mount_path="/opt/airflow/scripts", sub_path=None, read_only=True
+# )
+# volume = k8s.V1Volume(
+#     name="test-volume",
+#     host_path=k8s.V1HostPathVolumeSource(path=local_scripts_path)
+# )
+local_scripts_path = "/opt/airflow/scripts"
+
 volume_mount = k8s.V1VolumeMount(
-    name="test-volume", mount_path="/opt/airflow/scripts", sub_path=None, read_only=True
+    name="local-scripts-volume", mount_path=local_scripts_path, sub_path=None, read_only=True
 )
+
 volume = k8s.V1Volume(
-    name="test-volume",
-    host_path=k8s.V1HostPathVolumeSource(path=local_scripts_path)
+    name="local-scripts-volume",
+    persistent_volume_claim=V1PersistentVolumeClaimVolumeSource(claim_name="local-scripts-pvc"),
 )
 start = DummyOperator(task_id='start', dag=dag)
 
