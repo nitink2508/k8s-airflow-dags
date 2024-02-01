@@ -37,7 +37,7 @@ volume_mount = k8s.V1VolumeMount(
 
 volume = k8s.V1Volume(
     name="local-scripts-volume",
-    persistent_volume_claim=V1PersistentVolumeClaimVolumeSource(claim_name="local-scripts-pvc"),
+    persistent_volume_claim=k8s.V1PersistentVolumeClaimVolumeSource(claim_name="local-scripts-pvc"),
 )
 start = DummyOperator(task_id='start', dag=dag)
 
