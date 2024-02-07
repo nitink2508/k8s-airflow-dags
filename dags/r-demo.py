@@ -62,24 +62,9 @@ start = DummyOperator(task_id='start', dag=dag)
 #                           hostnetwork=True,
 #                           dag=dag
 #                           )
-# passing = KubernetesPodOperator(namespace='airflow',
-#                           image=image_name,
-#                           #cmds=["Rscript","script.R"],
-#                           #image_pull_secrets="regcred",
-#                           image_pull_secrets=[k8s.V1LocalObjectReference("regcred")],
-#                           labels={"foo": "bar"},
-#                           name="r-test",
-#                           task_id="r-task",
-#                           get_logs=True,
-#                           image_pull_policy='Always',
-#                           in_cluster=True,
-#                           hostnetwork=True,
-#                           dag=dag
-#                           )
-
 passing = KubernetesPodOperator(namespace='airflow',
                           image=image_name,
-                          cmds=["Rscript","/opt/airflow/scripts/script.R"],
+                          #cmds=["Rscript","script.R"],
                           #image_pull_secrets="regcred",
                           image_pull_secrets=[k8s.V1LocalObjectReference("regcred")],
                           labels={"foo": "bar"},
@@ -89,10 +74,25 @@ passing = KubernetesPodOperator(namespace='airflow',
                           image_pull_policy='Always',
                           in_cluster=True,
                           hostnetwork=True,
-                          volumes=[volume],
-                          volume_mounts=[volume_mount],
                           dag=dag
                           )
+
+# passing = KubernetesPodOperator(namespace='airflow',
+#                           image=image_name,
+#                           cmds=["Rscript","/opt/airflow/scripts/script.R"],
+#                           #image_pull_secrets="regcred",
+#                           image_pull_secrets=[k8s.V1LocalObjectReference("regcred")],
+#                           labels={"foo": "bar"},
+#                           name="r-test",
+#                           task_id="r-task",
+#                           get_logs=True,
+#                           image_pull_policy='Always',
+#                           in_cluster=True,
+#                           hostnetwork=True,
+#                           volumes=[volume],
+#                           volume_mounts=[volume_mount],
+#                           dag=dag
+#                           )
 
 
 
