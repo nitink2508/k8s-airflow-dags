@@ -81,7 +81,7 @@ start = DummyOperator(task_id='start', dag=dag)
 
 # passing = KubernetesPodOperator(namespace='airflow',
 #                           image=image_name,
-#                           cmds=["python","/opt/airflow/scripts/script.R"],
+#                           cmds=["Rscript","/opt/airflow/scripts/script.R"],
 #                           #image_pull_secrets="regcred",
 #                           image_pull_secrets=[k8s.V1LocalObjectReference("regcred")],
 #                           labels={"foo": "bar"},
@@ -98,7 +98,7 @@ start = DummyOperator(task_id='start', dag=dag)
 
 passing = KubernetesPodOperator(namespace='airflow',
                           image=image_name,
-                          cmds=["Rscript","/opt/airflow/scripts/test.py"],
+                          cmds=["python","/opt/airflow/scripts/test.py"],
                           #image_pull_secrets="regcred",
                           image_pull_secrets=[k8s.V1LocalObjectReference("regcred")],
                           labels={"foo": "bar"},
