@@ -47,6 +47,8 @@ volume = k8s.V1Volume(
     name="test-volume",
     persistent_volume_claim=k8s.V1PersistentVolumeClaimVolumeSource(claim_name="pvc-www"),
 )
+env_variables = {'DATABASE_HOST': '127.0.0.1', 'DATABASE_PORT': '3306'}
+
 
 start = DummyOperator(task_id='start', dag=dag)
 
@@ -77,9 +79,26 @@ start = DummyOperator(task_id='start', dag=dag)
 #                           dag=dag
 #                           )
 
+# passing = KubernetesPodOperator(namespace='airflow',
+#                           image=image_name,
+#                           cmds=["Rscript","/opt/airflow/scripts/script.R"],
+#                           #image_pull_secrets="regcred",
+#                           image_pull_secrets=[k8s.V1LocalObjectReference("regcred")],
+#                           labels={"foo": "bar"},
+#                           name="r-test",
+#                           task_id="r-task",
+#                           get_logs=True,
+#                           image_pull_policy='Always',
+#                           in_cluster=True,
+#                           hostnetwork=True,
+#                           volumes=[volume],
+#                           volume_mounts=[volume_mount],
+#                           dag=dag
+#                           )
+
 passing = KubernetesPodOperator(namespace='airflow',
                           image=image_name,
-                          cmds=["Rscript","/opt/airflow/scripts/script.R"],
+                          cmds=["Rscript","/opt/airflow/scripts/test.py"],
                           #image_pull_secrets="regcred",
                           image_pull_secrets=[k8s.V1LocalObjectReference("regcred")],
                           labels={"foo": "bar"},
@@ -87,12 +106,14 @@ passing = KubernetesPodOperator(namespace='airflow',
                           task_id="r-task",
                           get_logs=True,
                           image_pull_policy='Always',
+                          env_vars=env_variables,
                           in_cluster=True,
                           hostnetwork=True,
                           volumes=[volume],
                           volume_mounts=[volume_mount],
                           dag=dag
                           )
+
 
 
 
